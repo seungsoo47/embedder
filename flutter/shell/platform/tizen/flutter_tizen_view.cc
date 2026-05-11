@@ -129,7 +129,9 @@ void FlutterTizenView::OnRotate(int32_t degree) {
     // Compute renderer transformation based on the angle of rotation.
     double rad = (360 - rotation_degree_) * M_PI / 180;
     double trans_x = 0.0, trans_y = 0.0;
-    if (rotation_degree_ == 90) {
+    if (rotation_degree_ == 0) {
+      trans_y = 1.0;
+    } else if (rotation_degree_ == 90) {
       trans_y = height;
     } else if (rotation_degree_ == 180) {
       trans_x = width;
@@ -348,7 +350,9 @@ void FlutterTizenView::SendWindowMetrics(int32_t left,
     }
   }
 
-  engine_->SendWindowMetrics(left, top, width, height, pixel_ratio);
+  FT_LOG(Error) << "SendWindowMetrics: " << left << "," << top << "," << width << "," << height
+                << "," << pixel_ratio;
+  engine_->SendWindowMetrics(0, 0, width, height, pixel_ratio);
 }
 
 void FlutterTizenView::SendFlutterPointerEvent(FlutterPointerPhase phase,

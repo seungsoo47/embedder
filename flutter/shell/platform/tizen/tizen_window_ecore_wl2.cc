@@ -250,11 +250,10 @@ void TizenWindowEcoreWl2::SetWindowOptions() {
   }
 
   ecore_wl2_window_indicator_state_set(ecore_wl2_window_,
-                                       ECORE_WL2_INDICATOR_STATE_ON);
-  ecore_wl2_window_indicator_opacity_set(ecore_wl2_window_,
-                                         ECORE_WL2_INDICATOR_OPAQUE);
+                                       ECORE_WL2_INDICATOR_STATE_OFF);
   ecore_wl2_indicator_visible_type_set(ecore_wl2_window_,
-                                       ECORE_WL2_INDICATOR_VISIBLE_TYPE_SHOWN);
+                                       ECORE_WL2_INDICATOR_VISIBLE_TYPE_HIDDEN);
+  ecore_wl2_window_fullscreen_set(ecore_wl2_window_, EINA_TRUE);
 
 #ifdef TV_PROFILE
   int rotations[1] = {0};  // Default is only landscape.
@@ -440,13 +439,11 @@ void TizenWindowEcoreWl2::RegisterEventHandlers() {
                 reinterpret_cast<Ecore_Wl2_Event_Window_Configure*>(event);
             if (configure_event->win == self->GetWindowId()) {
               ecore_wl2_egl_window_resize_with_rotation(
-                  self->ecore_wl2_egl_window_, configure_event->x,
-                  configure_event->y, configure_event->w, configure_event->h,
-                  self->GetRotation());
+                  self->ecore_wl2_egl_window_, 0, 0, configure_event->w,
+                  configure_event->h, self->GetRotation());
 
-              self->view_delegate_->OnResize(
-                  configure_event->x, configure_event->y, configure_event->w,
-                  configure_event->h);
+              self->view_delegate_->OnResize(0, 0, configure_event->w,
+                                             configure_event->h);
               return ECORE_CALLBACK_DONE;
             }
           }
